@@ -1,0 +1,56 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta http-equiv="X-UA-Compatible" content="ie=edge">
+</head>
+<body>
+
+  <div>
+    <a href="/sort_books?sort_by=title">Sort by Title</a>
+    <a href="/sort_books?sort_by=author">Sort by Author</a>
+  </div>
+
+
+  <div>
+    <form action="{{ url_for('search_books') }}" method="GET">
+      <input type="text" name="search_term" placeholder="Enter search term">
+      <button type="submit">Search</button>
+    </form>
+  </div>
+
+
+      {% if success_message %}
+        <p>{{ success_message }}</p>
+      {% endif %}
+
+  <div>
+    {% if books %}
+      {% if search_term %}
+        <h2>Search Results for '{{ search_term }}':</h2>
+      {% endif %}
+      <ul>
+        {% for book in books %}
+          <h3>{{ book.title }}</h3>
+          <p>Author: {{ book.author }}</p>
+          <p>Publication Year: {{ book.publication_year }}</p>
+          <p>ISBN: {{ book.isbn }}</p>
+
+          <form action="{{ url_for('delete_book', book_id=book.id) }}" method="post">
+            <button type="submit">Delete Book</button>
+          </form>
+        {% endfor %}
+      </ul>
+
+    {% else %}
+      {% if no_results %}
+        <p>No books found matching '{{ search_term }}'.</p>
+      {% else %}
+        <p>No books in the database.</p>
+      {% endif %}
+    {% endif %}
+  </div>
+
+</body>
+</html>
